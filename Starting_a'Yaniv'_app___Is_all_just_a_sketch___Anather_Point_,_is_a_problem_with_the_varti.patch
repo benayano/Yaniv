@@ -1,0 +1,20 @@
+Index: app/src/main/java/com/benaya/yaniv/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/benaya/yaniv/MainActivity.kt	(date 1609321607351)
++++ app/src/main/java/com/benaya/yaniv/MainActivity.kt	(date 1609321607351)
+@@ -0,0 +1,11 @@
++package com.benaya.yaniv
++
++import androidx.appcompat.app.AppCompatActivity
++import android.os.Bundle
++
++class MainActivity : AppCompatActivity() {
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setContentView(R.layout.activity_main)
++    }
++}
+\ No newline at end of file

@@ -12,7 +12,7 @@ import com.benaya.yaniv.R
 class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
 
-    private val cardList:List<Card> = emptyList()
+    private val cardList:List<Card> = listOf(Card("a",3),Card("b",6), Card("c",5), Card("d",9), Card("b",7))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CardViewHolder(
             LayoutInflater.from(parent.context)
@@ -36,13 +36,16 @@ class CardViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
     fun bind(number:String, image:String){
         numberCard.text = number
 
-        imageCard = when(image){
+        imageCard.setImageResource( when(image){
             "a"-> R.drawable.ic_card_heart
             "b"-> R.drawable.ic_suitclubs
             "c"-> R.drawable.ic_suitdiamonds
             else-> R.drawable.ic_suitspades
         }
+        )
+
     }
+
 }
 
 

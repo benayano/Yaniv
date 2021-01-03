@@ -1,5 +1,8 @@
 package com.benaya.yaniv.Data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class Card(val value: Int, val shape: CardShape) {
     override fun toString(): String {
         var formattedShape = ""

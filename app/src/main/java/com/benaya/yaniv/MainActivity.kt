@@ -13,5 +13,5 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+data class Player(val name:String,val scores:Int)
 data class Card (val color:String,val value:Int)

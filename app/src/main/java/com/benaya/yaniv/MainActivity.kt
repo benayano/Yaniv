@@ -9,3 +9,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 }
+
+
+
+
+
+data class Card (val color:String,val value:Int)

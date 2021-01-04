@@ -13,15 +13,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_card_heart" />
+        tools:src="@drawable/ic_card_heart" />
 
     <TextView
         android:id="@+id/numCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/imageCard"
         app:layout_constraintEnd_toEndOf="@+id/imageCard"
-        app:layout_constraintStart_toStartOf="@+id/imageCard" />
+        app:layout_constraintStart_toStartOf="@+id/imageCard"
+        tools:text="10"/>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

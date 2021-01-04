@@ -13,7 +13,9 @@ import com.benaya.yaniv.R
 class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
 
-    private val cardList: List<Card> = listOf(Card(1,CardShape.CLUB), Card(4,CardShape.DIAMOND), Card(6, CardShape.HEART), Card(8, CardShape.SPADE), Card(9, CardShape.DIAMOND))
+    private val cardList: List<Card> = listOf(
+            Card(1,CardShape.CLUB), Card(4,CardShape.DIAMOND), Card(6, CardShape.HEART), Card(8, CardShape.SPADE), Card(9, CardShape.DIAMOND)
+    )
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CardViewHolder(

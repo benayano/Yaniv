@@ -10,24 +10,25 @@ import com.benaya.yaniv.R
 
 class PlayersAdapter() : RecyclerView.Adapter<PlayerViewHolder>() {
 
-    val playersList: List<Player> = listOf(
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-        Player("Moshe", 30), Player("David", 29), Player("Haim", 40)
-    )
+    var playersList: List<Player> = emptyList()
+//    var playersList: List<Player> = listOf(
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
+//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40)
+//    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PlayerViewHolder(
         LayoutInflater.from(parent.context)
@@ -43,6 +44,10 @@ class PlayersAdapter() : RecyclerView.Adapter<PlayerViewHolder>() {
 
     override fun getItemCount() = playersList.size
 
+    fun submitList(playersList: List<Player>) {
+        this.playersList = playersList
+        notifyDataSetChanged()
+    }
 }
 
 class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

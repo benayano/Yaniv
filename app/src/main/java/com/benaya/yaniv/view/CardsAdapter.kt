@@ -13,7 +13,7 @@ import com.benaya.yaniv.R
 class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
 
-    private val cardList: List<Card> = listOf(
+    private var cardList: List<Card> = listOf(
             Card(1,CardShape.CLUB), Card(4,CardShape.DIAMOND), Card(6, CardShape.HEART), Card(8, CardShape.SPADE), Card(9, CardShape.DIAMOND)
     )
 
@@ -31,6 +31,10 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
     override fun getItemCount() = cardList.size
 
+    fun submitList(cardsList: List<Card>) {
+        this.cardList = cardsList
+        notifyDataSetChanged()
+    }
 }
 
 class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

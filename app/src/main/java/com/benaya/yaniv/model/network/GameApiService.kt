@@ -7,9 +7,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface GameApiService {
-    @GET("games/")
+    @GET("/games/{id}")
     fun getGameStatus(@Path("id") id: Int, @Header("apikey") apikey: String): Call<GameResponse>
 
-    @POST("games/")
+    @POST("/games")
     fun postGamesStatus(@Header("apikey") apikey: String): Call<GameResponse>
 }

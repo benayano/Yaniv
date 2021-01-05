@@ -29,7 +29,7 @@
         app:srcCompat="@android:drawable/editbox_dropdown_light_frame" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/userNameTV"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginTop="24dp"
@@ -56,8 +56,16 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/statusTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/statusTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/teal_200"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

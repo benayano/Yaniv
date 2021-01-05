@@ -8,8 +8,8 @@ import retrofit2.http.Path
 
 interface GameApiService {
     @GET("/games/{id}")
-    fun getGameStatus(@Path("id") id: Int, @Header("apikey") apikey: String): Call<GameResponse>
+    fun getGameStatus(@Path("id") id: Int, @Header("apikey") apikey: String): Call<Game>
 
     @POST("/games")
-    fun postGamesStatus(@Header("apikey") apikey: String): Call<GameResponse>
+        fun postGamesStatus(@Header("apikey") apikey: String): Call<Game>
 }

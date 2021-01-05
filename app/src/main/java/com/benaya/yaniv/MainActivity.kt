@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         cardsListView.adapter = CardsAdapter()
         cardsListView.adapter?.notifyDataSetChanged()
 
-        playersListView.adapter =PlayersAdapter()
+        playersListView.adapter = PlayersAdapter()
         playersListView.adapter?.notifyDataSetChanged()
     }
 }

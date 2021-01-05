@@ -51,7 +51,7 @@ class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
     fun bind(name: String, score: String) {
-        playerName.text = "$name : "
-        playerScores.text = score
+        playerName.text = name
+        playerScores.text =" : $score"
     }
 }

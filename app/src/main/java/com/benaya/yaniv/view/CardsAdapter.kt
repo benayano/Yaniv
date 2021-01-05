@@ -26,7 +26,7 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val thisCard = cardList[position]
 
-        holder.bind(thisCard.value.toString(), thisCard.shape)
+        holder.bind(thisCard.value.toString(), thisCard.suit)
     }
 
     override fun getItemCount() = cardList.size
@@ -47,10 +47,11 @@ class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         imageCard.setImageResource(
                 when (image) {
-                    CardShape.CLUB -> R.drawable.ic_suitclubs
-                    CardShape.DIAMOND ->R.drawable.ic_suitdiamonds
-                    CardShape.SPADE -> R.drawable.ic_suitspades
-                    CardShape.HEART -> R.drawable.ic_card_heart
+                    CardShape.CLUBS -> R.drawable.ic_suitclubs
+                    CardShape.DIAMONDS ->R.drawable.ic_suitdiamonds
+                    CardShape.SPADES -> R.drawable.ic_suitspades
+                    CardShape.HEARTS -> R.drawable.ic_card_heart
+                    CardShape.JOKER -> R.drawable.ic_suit_joker
                     else ->R.drawable.ic_launcher_background
                 }
         )

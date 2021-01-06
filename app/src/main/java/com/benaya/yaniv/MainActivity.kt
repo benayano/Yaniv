@@ -68,14 +68,14 @@ class MainActivity : AppCompatActivity() {
                 statusTV.text = "game fetched"
             } else {
                 statusTV.text =
-                    "response.isSuccessful = ${response.isSuccessful} " + response.message()
+                    "response.isSuccessful = ${response.isSuccessful}.  ${response.message()}"
             }
         }
 
         private fun isPlayerMe(player: Player) = player.userId == 4
 
         override fun onFailure(call: Call<Game>, t: Throwable) {
-            statusTV.text = "onFailure\n" + call.toString()
+            statusTV.text = "onFailure\n"
             Log.e(MainActivity::javaClass.name, "game request failed", t)
         }
     }

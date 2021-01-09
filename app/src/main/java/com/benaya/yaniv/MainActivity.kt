@@ -1,14 +1,14 @@
 package com.benaya.yaniv
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.benaya.yaniv.Data.Card
 import com.benaya.yaniv.Data.Player
-import com.benaya.yaniv.model.network.GameApiServiceImpl
 import com.benaya.yaniv.model.network.Game
+import com.benaya.yaniv.model.network.GameApiServiceImpl
 import com.benaya.yaniv.view.CardsAdapter
 import com.benaya.yaniv.view.PlayersAdapter
 import retrofit2.Call
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadGame() {
         val call = GameApiServiceImpl
             .service
-            .getGameStatus(14, "168a0b51-5459-42ea-a002-02d7e388340b")
+            .getGameStatus(15, "168a0b51-5459-42ea-a002-02d7e388340b")
 
         call.enqueue(GameCallback())
 

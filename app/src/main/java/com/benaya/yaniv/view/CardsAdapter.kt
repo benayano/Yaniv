@@ -13,10 +13,7 @@ import com.benaya.yaniv.R
 class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
     private var cardList: List<Card> = emptyList()
-//    private var cardList: List<Card> = listOf(
-//            Card(1,CardShape.CLUB), Card(4,CardShape.DIAMOND), Card(6, CardShape.HEART), Card(8, CardShape.SPADE), Card(9, CardShape.DIAMOND)
-//    )
-
+    private var  selectedList = mutableListOf<Card>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CardViewHolder(
             LayoutInflater.from(parent.context)
@@ -26,9 +23,19 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val thisCard = cardList[position]
 
-        holder.bind(thisCard.value.toString(), thisCard.suit)
+        holder.bind(thisCard.value.toString(), thisCard.suit,thisCard in selectedList)
+        holder.itemView.setOnClickListener{
+            addOrRemovSelectedList(thisCard)
+        }
     }
-
+   private fun addOrRemovSelectedList(card : Card){
+       if (card in selectedList){
+           selectedList.remove(card)
+       }else{
+           selectedList.add(card)
+       }
+       notifyDataSetChanged()
+    }
     override fun getItemCount() = cardList.size
 
     fun submitList(cardsList: List<Card>) {
@@ -37,13 +44,22 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
     }
 }
 
+
+
 class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val imageCard: ImageView = itemView.findViewById(R.id.imageCard)
     private val numberCard: TextView = itemView.findViewById(R.id.numCard)
 
-    fun bind(number:String, image:CardShape ) {
+
+    fun bind(number:String, image:CardShape,selectedCard:Boolean ) {
         numberCard.text = number
+
+        if (selectedCard){
+            itemView.setBackgroundResource(R.color.select_card)
+        }else{
+            itemView.setBackgroundResource(R.color.white)
+        }
 
         imageCard.setImageResource(
                 when (image) {

@@ -18,3 +18,18 @@ data class Deck(
     val open: Card,
     val inDeck: List<Card>
 )
+
+
+@Serializable
+data class BodyMove(
+    val playerId: Int,
+   val gameId: Int,
+   val droppedCards: List<Card>,
+    val takeCardFrom: TakeCardFrom
+)
+
+@Serializable
+enum class TakeCardFrom {
+    Open,
+    Deck
+}

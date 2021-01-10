@@ -68,4 +68,23 @@
         android:background="@color/teal_200"
         />
 
+    <TextView
+        android:id="@+id/forErrors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="@+id/button"
+        app:layout_constraintStart_toStartOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/mainCard" />
+
+    <Button
+        android:id="@+id/boxOffice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="box office"
+        app:layout_constraintBottom_toTopOf="@+id/mainCard"
+        app:layout_constraintEnd_toEndOf="@+id/userNameTV"
+        app:layout_constraintStart_toStartOf="@+id/userNameTV"
+        app:layout_constraintTop_toBottomOf="@+id/userNameTV" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

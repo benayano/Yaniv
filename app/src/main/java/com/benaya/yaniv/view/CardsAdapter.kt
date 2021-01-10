@@ -32,7 +32,15 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
        if (card in selectedList){
            selectedList.remove(card)
        }else{
-           selectedList.add(card)
+           if (selectedList.size==0 || card.value == selectedList[0].value){
+               selectedList.add(card)
+           }else{
+             //  val error = Error()
+             // Toast.makeText(contract {forErrors  }, "אוי ואבוי לך אתה לא מקשיב בשיעור של אוראל!!!!", Toast.LENGTH_SHORT).show()
+
+              // .error.toastError(R.textView.forErrors,"Cards that do not have the same value must not be placed!!!  YOU BETTER NOT!!!")
+           }
+
        }
        notifyDataSetChanged()
     }

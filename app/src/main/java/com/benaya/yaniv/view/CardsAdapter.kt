@@ -13,7 +13,7 @@ import com.benaya.yaniv.R
 class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
     private var cardList: List<Card> = emptyList()
-    private var  selectedList = mutableListOf<Card>()
+    internal var  selectedList = mutableListOf<Card>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CardViewHolder(
             LayoutInflater.from(parent.context)
@@ -34,7 +34,7 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
        }else{
            if (selectedList.size==0 || card.value == selectedList[0].value){
                selectedList.add(card)
-           }else{
+          // }else{
              //  val error = Error()
              // Toast.makeText(contract {forErrors  }, "אוי ואבוי לך אתה לא מקשיב בשיעור של אוראל!!!!", Toast.LENGTH_SHORT).show()
 

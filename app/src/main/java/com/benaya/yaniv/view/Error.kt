@@ -9,7 +9,4 @@ class Error {
 
     fun toastError(context: Context,string: String) = context.toast(string)
 
-
-
-
 }

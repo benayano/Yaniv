@@ -21,6 +21,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var playersAdapter: PlayersAdapter
     lateinit var cardsListView: RecyclerView
     lateinit var playersListView: RecyclerView
+    lateinit var selectedCards: List<Card>
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +34,11 @@ class MainActivity : AppCompatActivity() {
 
         cardsAdapter = CardsAdapter()
         cardsListView.adapter = cardsAdapter
-//        cardsListView.adapter?.notifyDataSetChanged()
+
+        selectedCards = cardsAdapter.selectedList
 
         playersAdapter = PlayersAdapter()
         playersListView.adapter = playersAdapter
-//        playersListView.adapter?.notifyDataSetChanged()
 
         loadGame()
     }
@@ -46,9 +49,15 @@ class MainActivity : AppCompatActivity() {
             .getGameStatus(15, "168a0b51-5459-42ea-a002-02d7e388340b")
 
         call.enqueue(GameCallback())
-
-        //setProgressVisibility(true)
     }
+
+//    private fun moveTurn() {
+//        val call = GameApiServiceImpl
+//            .service
+//            .postMove( "168a0b51-5459-42ea-a002-02d7e388340b",)
+//
+//        call.enqueue(GameCallback())
+//    }
 
     inner class GameCallback : Callback<Game> {
         private val statusTV: TextView = findViewById<TextView>(R.id.statusTV)
@@ -84,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         //https://grokonez.com/kotlin/kotlin-sum-sumby-method-list-map-objects-example
         return cards.map { it.value }.sum()
     }
+
 }
 
 

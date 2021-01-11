@@ -11,6 +11,6 @@ interface GameApiService {
         fun postGamesStatus(@Header("apikey") apikey: String): Call<Game>
 
     @POST("/move")
-       fun replaceTurn(@Header("apikey") apikey: String,@Body() body:BodyMove):Call<Game>
+       fun postMove(@Header("apikey") apikey: String, @Body() body:BodyMove):Call<Game>
 
 }

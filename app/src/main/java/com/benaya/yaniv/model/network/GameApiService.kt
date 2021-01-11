@@ -10,7 +10,7 @@ interface GameApiService {
     @POST("/games")
         fun postGamesStatus(@Header("apikey") apikey: String): Call<Game>
 
-    @POST("/move")
+    @POST("/moves")
        fun postMove(@Header("apikey") apikey: String, @Body() body:BodyMove):Call<Game>
 
 }

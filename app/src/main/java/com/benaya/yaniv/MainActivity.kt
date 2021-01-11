@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    val kay:String ="34b0c905-3503-461c-9809-ba3cc3e5475c"
+    val kay:String ="168a0b51-5459-42ea-a002-02d7e388340b"
 
     private fun getSelectedCards() = cardsAdapter.selectedList
 
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             .service
             .postGamesStatus(kay)
 
-        Log.e(MainActivity::javaClass.name, "in joinGame")
+        Log.d(MainActivity::javaClass.name, "in joinGame")
         call.enqueue(GameCallback())
     }
 
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             .getGameStatus(gameId, kay)
 
         findViewById<TextView>(R.id.statusTV).text = "loadGame"
-        Log.e(MainActivity::javaClass.name, "in loadGame")
+        Log.d(MainActivity::javaClass.name, "in loadGame")
         call.enqueue(GameCallback())
     }
 
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 loadGame(gameId)
             }, 5000)
         }
-        Log.e(MainActivity::javaClass.name, "in loadGamePeriodically")
+        Log.d(MainActivity::javaClass.name, "in loadGamePeriodically")
         //setProgressVisibility(true)
     }
 
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onResponse(call: Call<Game>, response: Response<Game>) {
             //TODO: update progressBar
-            Log.e(MainActivity::javaClass.name, "onResponse fetching game")
+            Log.d(MainActivity::javaClass.name, "onResponse fetching game")
 
             if (response.isSuccessful) {
                 response.body()?.let { game ->
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
                         playersAdapter.submitList(listOf(Player(0, "Waiting for opponents", emptyList(), 0)))
                     }
                 }
-                Log.e(MainActivity::javaClass.name, "response is successful; game fetched.")
+                Log.d(MainActivity::javaClass.name, "response is successful; game fetched.")
             } else {
                 statusTV.text =
                     "response.isSuccessful = ${response.isSuccessful}.  ${response.message()}"
@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
             loadGamePeriodically(gameId)
         }
 
-        private fun isPlayerMe(player: Player) = player.userId == 5
+        private fun isPlayerMe(player: Player) = player.userId == 4
 
         override fun onFailure(call: Call<Game>, t: Throwable) {
             //statusTV.text = "onFailure\n"
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
     fun move(takeCardFrom: TakeCardFrom) {
         gameId?.let { gameId ->
             val bodyMove = BodyMove(
-                playerId = 5,
+                playerId = 4,
                 gameId,
                 getSelectedCards(),
                 takeCardFrom

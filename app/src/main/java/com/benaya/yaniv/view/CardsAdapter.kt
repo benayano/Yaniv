@@ -25,18 +25,16 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
         holder.bind(thisCard.value.toString(), thisCard.suit,thisCard in selectedList)
         holder.itemView.setOnClickListener{
-            addOrRemovSelectedList(thisCard)
+            addOrRemoveSelectedList(thisCard)
         }
     }
-   private fun addOrRemovSelectedList(card : Card){
+   private fun addOrRemoveSelectedList(card : Card){
        if (card in selectedList){
            selectedList.remove(card)
        }else{
            if (selectedList.size==0 || card.value == selectedList[0].value){
                selectedList.add(card)
-
            }
-
        }
        notifyDataSetChanged()
     }

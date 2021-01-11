@@ -61,14 +61,17 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
     }
+
+    val kay:String ="34b0c905-3503-461c-9809-ba3cc3e5475c"
 
     private fun getSelectedCards() = cardsAdapter.selectedList
 
     private fun joinGame() {
         val call = GameApiServiceImpl
             .service
-            .postGamesStatus("168a0b51-5459-42ea-a002-02d7e388340b")
+            .postGamesStatus(kay)
 
         Log.e(MainActivity::javaClass.name, "in joinGame")
         call.enqueue(GameCallback())
@@ -77,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadGame(gameId: Int) {
         val call = GameApiServiceImpl
             .service
-            .getGameStatus(gameId, "168a0b51-5459-42ea-a002-02d7e388340b")
+            .getGameStatus(gameId, kay)
 
         findViewById<TextView>(R.id.statusTV).text = "loadGame"
         Log.e(MainActivity::javaClass.name, "in loadGame")
@@ -139,7 +142,7 @@ class MainActivity : AppCompatActivity() {
             loadGamePeriodically(gameId)
         }
 
-        private fun isPlayerMe(player: Player) = player.userId == 4
+        private fun isPlayerMe(player: Player) = player.userId == 5
 
         override fun onFailure(call: Call<Game>, t: Throwable) {
             //statusTV.text = "onFailure\n"
@@ -156,7 +159,7 @@ class MainActivity : AppCompatActivity() {
     fun move(takeCardFrom: TakeCardFrom) {
         gameId?.let { gameId ->
             val bodyMove = BodyMove(
-                playerId = 4,
+                playerId = 5,
                 gameId,
                 getSelectedCards(),
                 takeCardFrom
@@ -164,7 +167,7 @@ class MainActivity : AppCompatActivity() {
 
             val call = GameApiServiceImpl
                 .service
-                .postMove("168a0b51-5459-42ea-a002-02d7e388340b", bodyMove)
+                .postMove(kay, bodyMove)
 
             call.enqueue(GameCallback())
 

@@ -36,7 +36,7 @@
         android:text="Turn of : name"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playersList"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -83,8 +83,8 @@
         android:layout_height="wrap_content"
         android:text="box office"
         app:layout_constraintBottom_toTopOf="@+id/mainCard"
-        app:layout_constraintEnd_toEndOf="@+id/userNameTV"
-        app:layout_constraintStart_toStartOf="@+id/userNameTV"
+        app:layout_constraintEnd_toEndOf="@+id/mainCard"
+        app:layout_constraintStart_toStartOf="@+id/mainCard"
         app:layout_constraintTop_toBottomOf="@+id/userNameTV" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,8 +3,8 @@ package com.benaya.yaniv.Data
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Card(val value: Int, val suit: CardShape) {
-    override fun toString(): String {
+data class Card(val value: Int, val suit: CardShape) {
+     fun formatted(): String {
         var formattedShape = ""
         val rows = Math.sqrt(value.toDouble()).toInt()
         val cols = value / rows

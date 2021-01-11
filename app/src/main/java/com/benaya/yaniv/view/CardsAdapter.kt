@@ -13,7 +13,7 @@ import com.benaya.yaniv.R
 class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
     private var cardList: List<Card> = emptyList()
-    internal var  selectedList = mutableListOf<Card>()
+    internal val  selectedList = mutableListOf<Card>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CardViewHolder(
             LayoutInflater.from(parent.context)
@@ -34,11 +34,7 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
        }else{
            if (selectedList.size==0 || card.value == selectedList[0].value){
                selectedList.add(card)
-          // }else{
-             //  val error = Error()
-             // Toast.makeText(contract {forErrors  }, "אוי ואבוי לך אתה לא מקשיב בשיעור של אוראל!!!!", Toast.LENGTH_SHORT).show()
 
-              // .error.toastError(R.textView.forErrors,"Cards that do not have the same value must not be placed!!!  YOU BETTER NOT!!!")
            }
 
        }
@@ -48,6 +44,11 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
     fun submitList(cardsList: List<Card>) {
         this.cardList = cardsList
+        notifyDataSetChanged()
+    }
+
+    fun clearSelectedCards() {
+        selectedList.clear()
         notifyDataSetChanged()
     }
 }

@@ -1,16 +1,19 @@
 package com.benaya.yaniv
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.benaya.yaniv.Data.Card
 import com.benaya.yaniv.Data.Player
-import com.benaya.yaniv.model.network.GameApiServiceImpl
+import com.benaya.yaniv.model.network.BodyMove
 import com.benaya.yaniv.model.network.Game
+import com.benaya.yaniv.model.network.GameApiServiceImpl
+import com.benaya.yaniv.model.network.TakeCardFrom
 import com.benaya.yaniv.view.CardsAdapter
 import com.benaya.yaniv.view.PlayersAdapter
 import retrofit2.Call
@@ -23,13 +26,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var playersAdapter: PlayersAdapter
     lateinit var cardsListView: RecyclerView
     lateinit var playersListView: RecyclerView
+
     private val handler = Handler()
-
-    //TODO: Ask Orel what is the right way to initialize gameId
     var gameId: Int? = null
-    lateinit var selectedCards: List<Card>
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +40,29 @@ class MainActivity : AppCompatActivity() {
         cardsAdapter = CardsAdapter()
         cardsListView.adapter = cardsAdapter
 
-        selectedCards = cardsAdapter.selectedList
-
         playersAdapter = PlayersAdapter()
         playersListView.adapter = playersAdapter
 
         joinGame()
 
+        val inDeck: Button = findViewById(R.id.boxOffice)
+        val open: ImageView = findViewById(R.id.mainCard)
+
+        open.setOnClickListener {
+            if (getSelectedCards().size > 0) {
+                move(TakeCardFrom.Open)
+            }
+        }
+        inDeck.setOnClickListener {
+            if (getSelectedCards().size > 0) {
+                move(TakeCardFrom.Deck)
+            }
+        }
+
+
     }
+
+    private fun getSelectedCards() = cardsAdapter.selectedList
 
     private fun joinGame() {
         val call = GameApiServiceImpl
@@ -132,6 +146,26 @@ class MainActivity : AppCompatActivity() {
     fun sumCardsValues(cards: List<Card>): Int {
         //https://grokonez.com/kotlin/kotlin-sum-sumby-method-list-map-objects-example
         return cards.map { it.value }.sum()
+    }
+
+    fun move(takeCardFrom: TakeCardFrom) {
+        gameId?.let { gameId ->
+            val bodyMove = BodyMove(
+                playerId = 4,
+                gameId,
+                getSelectedCards(),
+                takeCardFrom
+            )
+
+            val call = GameApiServiceImpl
+                .service
+                .postMove("168a0b51-5459-42ea-a002-02d7e388340b", bodyMove)
+
+            call.enqueue(GameCallback())
+
+            cardsAdapter.clearSelectedCards()
+
+        }
     }
 
 }

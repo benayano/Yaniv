@@ -3,10 +3,12 @@ package com.benaya.yaniv
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.benaya.yaniv.Data.Card
 import com.benaya.yaniv.Data.Player
@@ -30,6 +32,9 @@ class MainActivity : AppCompatActivity() {
     private val handler = Handler()
 
     var gameId: Int? = null
+
+    val apikay:String ="168a0b51-5459-42ea-a002-02d7e388340b"
+    val userId: Int = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,23 +69,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    val kay:String ="168a0b51-5459-42ea-a002-02d7e388340b"
-
     private fun getSelectedCards() = cardsAdapter.selectedList
 
     private fun joinGame() {
         val call = GameApiServiceImpl
             .service
-            .postGamesStatus(kay)
+            .postGamesStatus(apikay)
 
         Log.d(MainActivity::javaClass.name, "in joinGame")
         call.enqueue(GameCallback())
+
+        setVisibility(findViewById(R.id.progressBar), true)
     }
 
     private fun loadGame(gameId: Int) {
         val call = GameApiServiceImpl
             .service
-            .getGameStatus(gameId, kay)
+            .getGameStatus(gameId, apikay)
 
         findViewById<TextView>(R.id.statusTV).text = "loadGame"
         Log.d(MainActivity::javaClass.name, "in loadGame")
@@ -120,33 +125,34 @@ class MainActivity : AppCompatActivity() {
                         cardsAdapter.submitList(it.cards)
 
                         val sum = sumCardsValues(it.cards)
-                        //https://kotlinlang.org/docs/reference/control-flow.html
-                        findViewById<Button>(R.id.yanivButton).isEnabled = sum <= 7
-
-                        //statusTV.text = "The sum of your cards' values is: $sum in game#: $gameId"
+                        setEnabled(findViewById<Button>(R.id.yanivButton), sum <= 7)
                     }
 
                     val opponents = game.players.filterNot(this::isPlayerMe)
-                    if (opponents.size > 0) {
+                    if (opponents.isNotEmpty()) {
                         playersAdapter.submitList(opponents)
                     }else {
                         playersAdapter.submitList(listOf(Player(0, "Waiting for opponents", emptyList(), 0)))
                     }
+
+                    findViewById<TextView>(R.id.userNameTV).text =
+                        "currentPlayer: " + game.players.find { it.userId == game.currentPlayer }?.name
                 }
                 Log.d(MainActivity::javaClass.name, "response is successful; game fetched.")
             } else {
                 statusTV.text =
                     "response.isSuccessful = ${response.isSuccessful}.  ${response.message()}"
             }
-
+            setVisibility(findViewById(R.id.progressBar), false)
             loadGamePeriodically(gameId)
         }
 
-        private fun isPlayerMe(player: Player) = player.userId == 4
+        private fun isPlayerMe(player: Player) = player.userId == userId
 
         override fun onFailure(call: Call<Game>, t: Throwable) {
             //statusTV.text = "onFailure\n"
             Log.e(MainActivity::javaClass.name, "game request failed", t)
+            setVisibility(findViewById(R.id.progressBar), false)
             loadGamePeriodically(gameId)
         }
     }
@@ -159,7 +165,7 @@ class MainActivity : AppCompatActivity() {
     fun move(takeCardFrom: TakeCardFrom) {
         gameId?.let { gameId ->
             val bodyMove = BodyMove(
-                playerId = 4,
+                playerId = userId,
                 gameId,
                 getSelectedCards(),
                 takeCardFrom
@@ -167,15 +173,23 @@ class MainActivity : AppCompatActivity() {
 
             val call = GameApiServiceImpl
                 .service
-                .postMove(kay, bodyMove)
+                .postMove(apikay, bodyMove)
 
             call.enqueue(GameCallback())
 
             cardsAdapter.clearSelectedCards()
-
         }
+        findViewById<Button>(R.id.boxOffice).isEnabled = false
+        findViewById<ImageView>(R.id.mainCard).isEnabled = false
     }
 
+    private fun setEnabled(view: View, isEnabled: Boolean) {
+        view.isEnabled = isEnabled
+    }
+
+    private fun setVisibility(view: View, isVisible: Boolean) {
+        view.isVisible = isVisible
+    }
 }
 
 

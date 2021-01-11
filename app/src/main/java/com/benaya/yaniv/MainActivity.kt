@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var playersListView: RecyclerView
     private val handler = Handler()
 
-    //TODO: Ask Orel what is the right way to initialize gameId
     var gameId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,7 +95,11 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     val opponents = game.players.filterNot(this::isPlayerMe)
-                    playersAdapter.submitList(opponents)
+                    if (opponents.size > 0) {
+                        playersAdapter.submitList(opponents)
+                    }else {
+                        playersAdapter.submitList(listOf(Player(0, "Waiting for opponents", emptyList(), 0)))
+                    }
                 }
                 Log.e(MainActivity::javaClass.name, "response is successful; game fetched.")
             } else {

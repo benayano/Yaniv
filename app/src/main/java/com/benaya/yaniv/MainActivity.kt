@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.benaya.yaniv.Data.Card
+import com.benaya.yaniv.Data.CardShape
 import com.benaya.yaniv.Data.Player
 import com.benaya.yaniv.model.network.BodyMove
 import com.benaya.yaniv.model.network.Game
@@ -46,13 +47,19 @@ class MainActivity : AppCompatActivity() {
         cardsAdapter = CardsAdapter()
         cardsListView.adapter = cardsAdapter
 
+        //findViewById<ImageView>(R.id.inDeck).isEnabled = false
+        cardsAdapter.selectedChangedListener = {
+            findViewById<ImageView>(R.id.inDeck).isEnabled = cardsAdapter.selectedList.isNotEmpty()
+            findViewById<TextView>(R.id.open).isEnabled = cardsAdapter.selectedList.isNotEmpty()
+        }
+
         playersAdapter = PlayersAdapter()
         playersListView.adapter = playersAdapter
 
         joinGame()
 
-        val inDeck: Button = findViewById(R.id.boxOffice)
-        val open: ImageView = findViewById(R.id.mainCard)
+        val inDeck: ImageView = findViewById(R.id.inDeck)
+        val open: TextView = findViewById(R.id.open)
 
         open.setOnClickListener {
             if (getSelectedCards().size > 0) {
@@ -64,9 +71,6 @@ class MainActivity : AppCompatActivity() {
                 move(TakeCardFrom.Deck)
             }
         }
-
-
-
     }
 
     private fun getSelectedCards() = cardsAdapter.selectedList
@@ -87,7 +91,6 @@ class MainActivity : AppCompatActivity() {
             .service
             .getGameStatus(gameId, apikay)
 
-        findViewById<TextView>(R.id.statusTV).text = "loadGame"
         Log.d(MainActivity::javaClass.name, "in loadGame")
         call.enqueue(GameCallback())
     }
@@ -99,22 +102,13 @@ class MainActivity : AppCompatActivity() {
             }, 5000)
         }
         Log.d(MainActivity::javaClass.name, "in loadGamePeriodically")
-        //setProgressVisibility(true)
     }
 
-//    private fun moveTurn() {
-//        val call = GameApiServiceImpl
-//            .service
-//            .postMove( "168a0b51-5459-42ea-a002-02d7e388340b",)
-//
-//        call.enqueue(GameCallback())
-//    }
 
     inner class GameCallback : Callback<Game> {
         private val statusTV: TextView = findViewById<TextView>(R.id.statusTV)
 
         override fun onResponse(call: Call<Game>, response: Response<Game>) {
-            //TODO: update progressBar
             Log.d(MainActivity::javaClass.name, "onResponse fetching game")
 
             if (response.isSuccessful) {
@@ -137,9 +131,24 @@ class MainActivity : AppCompatActivity() {
 
                     findViewById<TextView>(R.id.userNameTV).text =
                         "currentPlayer: " + game.players.find { it.userId == game.currentPlayer }?.name
+
+                    findViewById<ImageView>(R.id.mainCard).setImageResource(when (game.deck.open.suit) {
+                        CardShape.CLUBS -> R.drawable.ic_suitclubs
+                        CardShape.DIAMONDS ->R.drawable.ic_suitdiamonds
+                        CardShape.SPADES -> R.drawable.ic_suitspades
+                        CardShape.HEARTS -> R.drawable.ic_card_heart
+                        CardShape.JOKER -> R.drawable.ic_suit_joker
+                        else ->R.drawable.ic_launcher_background
+                    })
+
+                    findViewById<TextView>(R.id.open).text = game.deck.open.value.toString()
+                    //TODO: set maximum text size
+
+                    //TODO: turn cardsListView back to be clickable
                 }
                 Log.d(MainActivity::javaClass.name, "response is successful; game fetched.")
             } else {
+                //TODO: set cardsListView to be un-clickable
                 statusTV.text =
                     "response.isSuccessful = ${response.isSuccessful}.  ${response.message()}"
             }
@@ -150,7 +159,6 @@ class MainActivity : AppCompatActivity() {
         private fun isPlayerMe(player: Player) = player.userId == userId
 
         override fun onFailure(call: Call<Game>, t: Throwable) {
-            //statusTV.text = "onFailure\n"
             Log.e(MainActivity::javaClass.name, "game request failed", t)
             setVisibility(findViewById(R.id.progressBar), false)
             loadGamePeriodically(gameId)
@@ -179,8 +187,8 @@ class MainActivity : AppCompatActivity() {
 
             cardsAdapter.clearSelectedCards()
         }
-        findViewById<Button>(R.id.boxOffice).isEnabled = false
-        findViewById<ImageView>(R.id.mainCard).isEnabled = false
+        setEnabled(findViewById(R.id.inDeck), false)
+        setEnabled(findViewById(R.id.open), false)
     }
 
     private fun setEnabled(view: View, isEnabled: Boolean) {

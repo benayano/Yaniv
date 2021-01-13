@@ -16,7 +16,8 @@
         android:layout_marginTop="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <ImageView
         android:id="@+id/mainCard"
@@ -41,15 +42,6 @@
         app:layout_constraintStart_toEndOf="@+id/playersList"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/yanivButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="yaniv"
-        app:layout_constraintEnd_toEndOf="@+id/mainCard"
-        app:layout_constraintStart_toStartOf="@+id/mainCard"
-        app:layout_constraintTop_toBottomOf="@+id/mainCard" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cardsList"
@@ -62,6 +54,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/cardsList">
+
+
+<!--        https://developer.android.com/guide/topics/ui/layout/linear#equal-weight-->
+
+        <TextView
+            android:id="@+id/open"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/design_default_color_secondary_variant"
+            android:enabled="false"
+            />
+        <ImageView
+            android:id="@+id/inDeck"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_suit_joker"
+            />
+        <Button
+            android:id="@+id/yanivButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="yaniv"
+            />
+
+    </LinearLayout>
     <TextView
         android:id="@+id/statusTV"
         android:layout_width="match_parent"
@@ -70,17 +98,6 @@
         android:background="@color/teal_200"
         />
 
-    <Button
-        android:id="@+id/boxOffice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="box office"
-        app:layout_constraintBottom_toTopOf="@+id/mainCard"
-        app:layout_constraintEnd_toEndOf="@+id/mainCard"
-        app:layout_constraintStart_toStartOf="@+id/mainCard"
-        app:layout_constraintTop_toBottomOf="@+id/userNameTV"
-        />
-    
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

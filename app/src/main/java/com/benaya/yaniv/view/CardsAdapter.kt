@@ -15,6 +15,8 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
     private var cardList: List<Card> = emptyList()
     internal val  selectedList = mutableListOf<Card>()
 
+    internal var selectedChangedListener: (() -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CardViewHolder(
             LayoutInflater.from(parent.context)
                     .inflate(R.layout.card, parent, false)
@@ -36,6 +38,7 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
                selectedList.add(card)
            }
        }
+       selectedChangedListener?.invoke()
        notifyDataSetChanged()
     }
     override fun getItemCount() = cardList.size
@@ -59,7 +62,7 @@ class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val numberCard: TextView = itemView.findViewById(R.id.numCard)
 
 
-    fun bind(number:String, image:CardShape,selectedCard:Boolean ) {
+    fun bind(number:String, image:CardShape, selectedCard: Boolean = false ) {
         numberCard.text = number
 
         if (selectedCard){

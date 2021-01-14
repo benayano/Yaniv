@@ -13,6 +13,7 @@ import com.benaya.yaniv.R
 class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
 
     private var cardList: List<Card> = emptyList()
+    private var isClickEnabled = true
     internal val  selectedList = mutableListOf<Card>()
 
     internal var selectedChangedListener: (() -> Unit)? = null
@@ -29,6 +30,7 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
         holder.itemView.setOnClickListener{
             addOrRemoveSelectedList(thisCard)
         }
+        holder.itemView.isEnabled = isClickEnabled
     }
    private fun addOrRemoveSelectedList(card : Card){
        if (card in selectedList){
@@ -51,6 +53,10 @@ class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {
     fun clearSelectedCards() {
         selectedList.clear()
         notifyDataSetChanged()
+    }
+
+    fun setClickable() {
+
     }
 }
 

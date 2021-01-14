@@ -66,13 +66,11 @@
 
 <!--        https://developer.android.com/guide/topics/ui/layout/linear#equal-weight-->
 
-        <TextView
-            android:id="@+id/open"
+        <include layout="@layout/card"
+            android:id="@+id/openCard"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:background="@color/design_default_color_secondary_variant"
-            android:enabled="false"
             />
         <ImageView
             android:id="@+id/inDeck"

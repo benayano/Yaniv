@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.benaya.yaniv.Data.Card
@@ -25,16 +25,27 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var cardsAdapter: CardsAdapter
-    lateinit var playersAdapter: PlayersAdapter
-    lateinit var cardsListView: RecyclerView
-    lateinit var playersListView: RecyclerView
+    private lateinit var cardsAdapter: CardsAdapter
+    private lateinit var playersAdapter: PlayersAdapter
+    private lateinit var cardsListView: RecyclerView
+    private lateinit var playersListView: RecyclerView
+    private lateinit var actionsButtons: LinearLayout
+    private lateinit var currentPlayerTV: TextView
+    private lateinit var progressBar: ProgressBar
+
+//    private lateinit var openCard: View
+    private lateinit var numOpenCard: TextView
+    private lateinit var imageOpenCard: ImageView
+    private lateinit var inDeckCard: ImageView
+    private lateinit var yanivButton: Button
+
+    lateinit var statusTV: TextView
 
     private val handler = Handler()
 
     var gameId: Int? = null
 
-    val apikay:String ="168a0b51-5459-42ea-a002-02d7e388340b"
+    private val apikay:String ="168a0b51-5459-42ea-a002-02d7e388340b"
     val userId: Int = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,30 +58,59 @@ class MainActivity : AppCompatActivity() {
         cardsAdapter = CardsAdapter()
         cardsListView.adapter = cardsAdapter
 
-        //findViewById<ImageView>(R.id.inDeck).isEnabled = false
-        cardsAdapter.selectedChangedListener = {
-            findViewById<ImageView>(R.id.inDeck).isEnabled = cardsAdapter.selectedList.isNotEmpty()
-            findViewById<TextView>(R.id.open).isEnabled = cardsAdapter.selectedList.isNotEmpty()
-        }
-
         playersAdapter = PlayersAdapter()
         playersListView.adapter = playersAdapter
 
-        joinGame()
+        currentPlayerTV = findViewById(R.id.userNameTV)
 
-        val inDeck: ImageView = findViewById(R.id.inDeck)
-        val open: TextView = findViewById(R.id.open)
+        progressBar = findViewById(R.id.progressBar)
 
-        open.setOnClickListener {
+//        openCard = findViewById<View>(R.id.openCard)
+
+        imageOpenCard = findViewById(R.id.imageCard)
+        numOpenCard = findViewById(R.id.numCard)
+
+        actionsButtons = findViewById(R.id.actions)
+//        actionsButtons.forEach {
+//            setEnabled(it, false)
+//        }
+        cardsListView.forEach {
+            setEnabled(it, false)
+            Log.i(MainActivity::javaClass.name, "$it -> ${it.isEnabled}")
+        }
+
+        inDeckCard = findViewById(R.id.inDeck)
+//        // val openCard: ????? = findViewById(R.id.openCard)
+        setEnabled(inDeckCard, false)
+        cardsAdapter.selectedChangedListener = {
+            setEnabled(inDeckCard, cardsAdapter.selectedList.isNotEmpty())
+            setEnabled(imageOpenCard, cardsAdapter.selectedList.isNotEmpty())
+            setEnabled(numOpenCard, cardsAdapter.selectedList.isNotEmpty())
+        }
+
+        yanivButton = findViewById(R.id.yanivButton)
+
+        statusTV = findViewById(R.id.statusTV)
+
+
+        //TODO: Ask Orel why it doesn't work
+        numOpenCard.setOnClickListener {
             if (getSelectedCards().size > 0) {
                 move(TakeCardFrom.Open)
             }
         }
-        inDeck.setOnClickListener {
+        imageOpenCard.setOnClickListener {
+            if (getSelectedCards().size > 0) {
+                move(TakeCardFrom.Open)
+            }
+        }
+        inDeckCard.setOnClickListener {
             if (getSelectedCards().size > 0) {
                 move(TakeCardFrom.Deck)
             }
         }
+
+        joinGame()
     }
 
     private fun getSelectedCards() = cardsAdapter.selectedList
@@ -83,7 +123,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(MainActivity::javaClass.name, "in joinGame")
         call.enqueue(GameCallback())
 
-        setVisibility(findViewById(R.id.progressBar), true)
+        setVisibility(progressBar, true)
     }
 
     private fun loadGame(gameId: Int) {
@@ -106,7 +146,6 @@ class MainActivity : AppCompatActivity() {
 
 
     inner class GameCallback : Callback<Game> {
-        private val statusTV: TextView = findViewById<TextView>(R.id.statusTV)
 
         override fun onResponse(call: Call<Game>, response: Response<Game>) {
             Log.d(MainActivity::javaClass.name, "onResponse fetching game")
@@ -119,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                         cardsAdapter.submitList(it.cards)
 
                         val sum = sumCardsValues(it.cards)
-                        setEnabled(findViewById<Button>(R.id.yanivButton), sum <= 7)
+                        setEnabled(yanivButton, sum <= 7)
                     }
 
                     val opponents = game.players.filterNot(this::isPlayerMe)
@@ -129,10 +168,10 @@ class MainActivity : AppCompatActivity() {
                         playersAdapter.submitList(listOf(Player(0, "Waiting for opponents", emptyList(), 0)))
                     }
 
-                    findViewById<TextView>(R.id.userNameTV).text =
+                    currentPlayerTV.text =
                         "currentPlayer: " + game.players.find { it.userId == game.currentPlayer }?.name
 
-                    findViewById<ImageView>(R.id.mainCard).setImageResource(when (game.deck.open.suit) {
+                    imageOpenCard.setImageResource(when (game.deck.open.suit) {
                         CardShape.CLUBS -> R.drawable.ic_suitclubs
                         CardShape.DIAMONDS ->R.drawable.ic_suitdiamonds
                         CardShape.SPADES -> R.drawable.ic_suitspades
@@ -141,8 +180,7 @@ class MainActivity : AppCompatActivity() {
                         else ->R.drawable.ic_launcher_background
                     })
 
-                    findViewById<TextView>(R.id.open).text = game.deck.open.value.toString()
-                    //TODO: set maximum text size
+                    numOpenCard.text = game.deck.open.value.toString()
 
                     //TODO: turn cardsListView back to be clickable
                 }
@@ -152,7 +190,7 @@ class MainActivity : AppCompatActivity() {
                 statusTV.text =
                     "response.isSuccessful = ${response.isSuccessful}.  ${response.message()}"
             }
-            setVisibility(findViewById(R.id.progressBar), false)
+            setVisibility(progressBar, false)
             loadGamePeriodically(gameId)
         }
 
@@ -160,7 +198,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onFailure(call: Call<Game>, t: Throwable) {
             Log.e(MainActivity::javaClass.name, "game request failed", t)
-            setVisibility(findViewById(R.id.progressBar), false)
+            setVisibility(progressBar, false)
             loadGamePeriodically(gameId)
         }
     }
@@ -170,7 +208,7 @@ class MainActivity : AppCompatActivity() {
         return cards.map { it.value }.sum()
     }
 
-    fun move(takeCardFrom: TakeCardFrom) {
+    private fun move(takeCardFrom: TakeCardFrom) {
         gameId?.let { gameId ->
             val bodyMove = BodyMove(
                 playerId = userId,
@@ -187,8 +225,9 @@ class MainActivity : AppCompatActivity() {
 
             cardsAdapter.clearSelectedCards()
         }
-        setEnabled(findViewById(R.id.inDeck), false)
-        setEnabled(findViewById(R.id.open), false)
+        setEnabled(inDeckCard, false)
+        setEnabled(numOpenCard, false)
+        setEnabled(imageOpenCard, false)
     }
 
     private fun setEnabled(view: View, isEnabled: Boolean) {
@@ -199,7 +238,3 @@ class MainActivity : AppCompatActivity() {
         view.isVisible = isVisible
     }
 }
-
-
-
-

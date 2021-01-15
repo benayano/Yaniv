@@ -1,4 +1,4 @@
-package com.benaya.yaniv.Data
+package com.benaya.yaniv.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

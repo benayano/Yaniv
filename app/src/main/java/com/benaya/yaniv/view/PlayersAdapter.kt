@@ -5,30 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.benaya.yaniv.Data.Player
+import com.benaya.yaniv.data.Player
 import com.benaya.yaniv.R
 
 class PlayersAdapter() : RecyclerView.Adapter<PlayerViewHolder>() {
 
     var playersList: List<Player> = emptyList()
-//    var playersList: List<Player> = listOf(
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40),
-//        Player("Moshe", 30), Player("David", 29), Player("Haim", 40)
-//    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PlayerViewHolder(
         LayoutInflater.from(parent.context)

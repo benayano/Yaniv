@@ -1,7 +1,7 @@
 package com.benaya.yaniv.model.network
 
-import com.benaya.yaniv.Data.Card
-import com.benaya.yaniv.Data.Player
+import com.benaya.yaniv.data.Card
+import com.benaya.yaniv.data.Player
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.benaya.yaniv.Data.Card
-import com.benaya.yaniv.Data.CardShape
+import com.benaya.yaniv.data.Card
+import com.benaya.yaniv.data.CardShape
 import com.benaya.yaniv.R
 
 class CardsAdapter() : RecyclerView.Adapter<CardViewHolder>() {

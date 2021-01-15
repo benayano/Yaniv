@@ -1,12 +1,13 @@
-package com.benaya.yaniv.Data
+package com.benaya.yaniv.data
 
 import kotlinx.serialization.Serializable
+import kotlin.math.sqrt
 
 @Serializable
 data class Card(val value: Int, val suit: CardShape) {
      fun formatted(): String {
         var formattedShape = ""
-        val rows = Math.sqrt(value.toDouble()).toInt()
+        val rows = sqrt(value.toDouble()).toInt()
         val cols = value / rows
 
         for (r in 1..rows) {

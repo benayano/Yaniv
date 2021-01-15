@@ -8,9 +8,9 @@ interface GameApiService {
     fun getGameStatus(@Path("id") id: Int, @Header("apikey") apikey: String): Call<Game>
 
     @POST("/games")
-        fun postGamesStatus(@Header("apikey") apikey: String): Call<Game>
+    fun postGamesStatus(@Header("apikey") apikey: String): Call<Game>
 
     @POST("/moves")
-       fun postMove(@Header("apikey") apikey: String, @Body() body:BodyMove):Call<Game>
+    fun postMove(@Header("apikey") apikey: String, @Body() body: BodyMove): Call<Game>
 
 }

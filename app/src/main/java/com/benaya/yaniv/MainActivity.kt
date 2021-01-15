@@ -6,13 +6,12 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.benaya.yaniv.Data.Card
-import com.benaya.yaniv.Data.CardShape
-import com.benaya.yaniv.Data.Player
+import com.benaya.yaniv.data.Card
+import com.benaya.yaniv.data.CardShape
+import com.benaya.yaniv.data.Player
 import com.benaya.yaniv.model.network.BodyMove
 import com.benaya.yaniv.model.network.Game
 import com.benaya.yaniv.model.network.GameApiServiceImpl
@@ -33,7 +32,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentPlayerTV: TextView
     private lateinit var progressBar: ProgressBar
 
-//    private lateinit var openCard: View
     private lateinit var numOpenCard: TextView
     private lateinit var imageOpenCard: ImageView
     private lateinit var inDeckCard: ImageView
@@ -43,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     var gameId: Int? = null
 
-    private val apikay:String ="168a0b51-5459-42ea-a002-02d7e388340b"
+    private val apiKey: String = "168a0b51-5459-42ea-a002-02d7e388340b"
     val userId: Int = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,22 +61,18 @@ class MainActivity : AppCompatActivity() {
 
         progressBar = findViewById(R.id.progressBar)
 
-//        openCard = findViewById<View>(R.id.openCard)
-
         imageOpenCard = findViewById(R.id.imageCard)
         numOpenCard = findViewById(R.id.numCard)
 
         actionsButtons = findViewById(R.id.actions)
-//        actionsButtons.forEach {
-//            setEnabled(it, false)
-//        }
+
         cardsListView.forEach {
             setEnabled(it, false)
             Log.i(MainActivity::javaClass.name, "$it -> ${it.isEnabled}")
         }
 
         inDeckCard = findViewById(R.id.inDeck)
-//        // val openCard: ????? = findViewById(R.id.openCard)
+
         setEnabled(inDeckCard, false)
         cardsAdapter.selectedChangedListener = {
             setEnabled(inDeckCard, cardsAdapter.selectedList.isNotEmpty())
@@ -90,8 +84,6 @@ class MainActivity : AppCompatActivity() {
 
         statusTV = findViewById(R.id.statusTV)
 
-
-        //TODO: Ask Orel why it doesn't work
         numOpenCard.setOnClickListener {
             if (getSelectedCards().size > 0) {
                 move(TakeCardFrom.Open)
@@ -116,7 +108,7 @@ class MainActivity : AppCompatActivity() {
     private fun joinGame() {
         val call = GameApiServiceImpl
             .service
-            .postGamesStatus(apikay)
+            .postGamesStatus(apiKey)
 
         Log.d(MainActivity::javaClass.name, "in joinGame")
         call.enqueue(GameCallback())
@@ -127,7 +119,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadGame(gameId: Int) {
         val call = GameApiServiceImpl
             .service
-            .getGameStatus(gameId, apikay)
+            .getGameStatus(gameId, apiKey)
 
         Log.d(MainActivity::javaClass.name, "in loadGame")
         call.enqueue(GameCallback())
@@ -150,8 +142,10 @@ class MainActivity : AppCompatActivity() {
 
             if (response.isSuccessful) {
                 response.body()?.let { game ->
-                    if (gameId != game.id)
+                    if (gameId != game.id) {
                         gameId = game.id
+                    }
+
                     game.players.find(this::isPlayerMe)?.let {
                         cardsAdapter.submitList(it.cards)
 
@@ -167,7 +161,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     currentPlayerTV.text =
-                        "currentPlayer: " + game.players.find { it.userId == game.currentPlayer }?.name
+                        "currentPlayer: ${game.players.find { it.userId == game.currentPlayer }?.name}"
 
                     imageOpenCard.setImageResource(when (game.deck.open.suit) {
                         CardShape.CLUBS -> R.drawable.ic_suitclubs
@@ -217,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 
             val call = GameApiServiceImpl
                 .service
-                .postMove(apikay, bodyMove)
+                .postMove(apiKey, bodyMove)
 
             call.enqueue(GameCallback())
 

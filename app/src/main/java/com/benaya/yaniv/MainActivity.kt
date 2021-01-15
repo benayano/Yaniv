@@ -41,8 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var statusTV: TextView
 
-    private val handler = Handler()
-
     var gameId: Int? = null
 
     private val apikay:String ="168a0b51-5459-42ea-a002-02d7e388340b"
@@ -137,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadGamePeriodically(gameId: Int?) {
         gameId?.let {
-            handler.postDelayed({
+            Handler(mainLooper).postDelayed({
                 loadGame(gameId)
             }, 5000)
         }

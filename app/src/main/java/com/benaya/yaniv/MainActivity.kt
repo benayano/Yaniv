@@ -134,6 +134,42 @@ class MainActivity : AppCompatActivity() {
         Log.d(MainActivity::javaClass.name, "in loadGamePeriodically")
     }
 
+    private fun onGameUpdated(game: Game) {
+        if (gameId != game.id) {
+            gameId = game.id
+        }
+
+        game.players.find(this::isPlayerMe)?.let {
+            cardsAdapter.submitList(it.cards)
+
+            val sum = sumCardsValues(it.cards)
+            setEnabled(yanivButton, sum <= 7)
+        }
+
+        val opponents = game.players.filterNot(this::isPlayerMe)
+        if (opponents.isNotEmpty()) {
+            playersAdapter.submitList(opponents)
+        }else {
+            playersAdapter.submitList(listOf(Player(0, "Waiting for opponents", emptyList(), 0)))
+        }
+
+        currentPlayerTV.text =
+            "currentPlayer: ${game.players.find { it.userId == game.currentPlayer }?.name}"
+
+        imageOpenCard.setImageResource(when (game.deck.open.suit) {
+            CardShape.CLUBS -> R.drawable.ic_suitclubs
+            CardShape.DIAMONDS ->R.drawable.ic_suitdiamonds
+            CardShape.SPADES -> R.drawable.ic_suitspades
+            CardShape.HEARTS -> R.drawable.ic_card_heart
+            CardShape.JOKER -> R.drawable.ic_suit_joker
+        })
+
+        numOpenCard.text = game.deck.open.value.toString()
+
+        cardsAdapter.setClickable(true)
+    }
+
+    private fun isPlayerMe(player: Player) = player.userId == userId
 
     inner class GameCallback : Callback<Game> {
 
@@ -142,43 +178,11 @@ class MainActivity : AppCompatActivity() {
 
             if (response.isSuccessful) {
                 response.body()?.let { game ->
-                    if (gameId != game.id) {
-                        gameId = game.id
-                    }
-
-                    game.players.find(this::isPlayerMe)?.let {
-                        cardsAdapter.submitList(it.cards)
-
-                        val sum = sumCardsValues(it.cards)
-                        setEnabled(yanivButton, sum <= 7)
-                    }
-
-                    val opponents = game.players.filterNot(this::isPlayerMe)
-                    if (opponents.isNotEmpty()) {
-                        playersAdapter.submitList(opponents)
-                    }else {
-                        playersAdapter.submitList(listOf(Player(0, "Waiting for opponents", emptyList(), 0)))
-                    }
-
-                    currentPlayerTV.text =
-                        "currentPlayer: ${game.players.find { it.userId == game.currentPlayer }?.name}"
-
-                    imageOpenCard.setImageResource(when (game.deck.open.suit) {
-                        CardShape.CLUBS -> R.drawable.ic_suitclubs
-                        CardShape.DIAMONDS ->R.drawable.ic_suitdiamonds
-                        CardShape.SPADES -> R.drawable.ic_suitspades
-                        CardShape.HEARTS -> R.drawable.ic_card_heart
-                        CardShape.JOKER -> R.drawable.ic_suit_joker
-                        else ->R.drawable.ic_launcher_background
-                    })
-
-                    numOpenCard.text = game.deck.open.value.toString()
-
-                    //TODO: turn cardsListView back to be clickable
+                    onGameUpdated(game)
                 }
                 Log.d(MainActivity::javaClass.name, "response is successful; game fetched.")
             } else {
-                //TODO: set cardsListView to be un-clickable
+                cardsAdapter.setClickable(false)
                 statusTV.text =
                     "response.isSuccessful = ${response.isSuccessful}.  ${response.message()}"
             }
@@ -186,13 +190,31 @@ class MainActivity : AppCompatActivity() {
             loadGamePeriodically(gameId)
         }
 
-        private fun isPlayerMe(player: Player) = player.userId == userId
-
         override fun onFailure(call: Call<Game>, t: Throwable) {
             Log.e(MainActivity::javaClass.name, "game request failed", t)
             setVisibility(progressBar, false)
             loadGamePeriodically(gameId)
         }
+    }
+
+    inner class MoveCallback: Callback<Game> {
+        override fun onResponse(call: Call<Game>, response: Response<Game>) {
+            if (response.isSuccessful) {
+                response.body()?.let { game ->
+                    onGameUpdated(game)
+                }
+                Log.d(MainActivity::javaClass.name, "response is successful; move is done.")
+            } else {
+                Log.e(MainActivity::javaClass.name, "response is not successful, move has failed ${response.errorBody()?.string()}")
+                Toast.makeText(this@MainActivity, response.errorBody()?.string(), Toast.LENGTH_LONG).show()
+            }
+        }
+
+        override fun onFailure(call: Call<Game>, t: Throwable) {
+            Log.e(MainActivity::javaClass.name, "response is not successful, move has failed", t)
+            Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG).show()
+        }
+
     }
 
     fun sumCardsValues(cards: List<Card>): Int {
@@ -213,7 +235,7 @@ class MainActivity : AppCompatActivity() {
                 .service
                 .postMove(apiKey, bodyMove)
 
-            call.enqueue(GameCallback())
+            call.enqueue(MoveCallback())
 
             cardsAdapter.clearSelectedCards()
         }

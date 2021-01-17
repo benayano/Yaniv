@@ -183,9 +183,10 @@ class MainActivity : AppCompatActivity() {
                 Log.d(MainActivity::javaClass.name, "response is successful; game fetched.")
             } else {
                 cardsAdapter.setClickable(false)
-                statusTV.text =
-                    "response.isSuccessful = ${response.isSuccessful}.  ${response.message()}"
             }
+            statusTV.text =
+                "response.isSuccessful = ${response.isSuccessful}.  ${response.message()}"
+
             setVisibility(progressBar, false)
             loadGamePeriodically(gameId)
         }
